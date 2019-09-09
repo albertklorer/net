@@ -33,6 +33,20 @@ class ReLU(Layer):
         relu_grad = input > 0
         return grad_output*relu_grad
 
+class TanH(Layer):
+    # applies elementwise tanh to all inputs
+    def __init__(self):
+        pass
+
+    def forward(self, input):
+        # apply elementwise to all inputs
+        tanh_forward = np.tanh(input)
+        return tanh_forward
+
+    def backward(self, imput, grad_output):
+        tanh_grad = 1.0 - np.tanh(input)**2
+        return grad_output * tanh_grad
+
 class Dense(Layer):
     def __init__(self, input_units, output_units, learning_rate=5.0):
         # A dense layer is a layer which performs a learned affine transformation:
@@ -134,7 +148,7 @@ def iterate_minibatches(inputs, targets, batchsize, shuffle=False):
             excerpt = slice(start_idx, start_idx + batchsize)
         yield inputs[excerpt], targets[excerpt]
 
-# loading variables with training data from test
+# loading variables with training data for - numerical validation
 X_train = np.array([[0.0,0.0,0.0], [0.0,0.0,1.0], [0.0,1.0,0.0]])
 y_train = np.array([[1.0, 0.0], [0.0, 1.0], [[0.0, 1.0]]])
 X_val = np.array([[0.0, 1.0, 1.0]])
@@ -145,9 +159,9 @@ y_test = np.array([[0.0, 1.0], [1.0, 0.0]])
 # create network layer by layer
 network = []
 network.append(Dense(X_train.shape[1],3))
-network.append(ReLU())
+network.append(TanH())
 network.append(Dense(3,4))
-network.append(ReLU())
+network.append(TanH())
 network.append(Dense(4,2))
 
 train_log = []
