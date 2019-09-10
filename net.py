@@ -48,7 +48,7 @@ class TanH(Layer):
         return grad_output * tanh_grad
 
 class Dense(Layer):
-    def __init__(self, input_units, output_units, learning_rate=5.0):
+    def __init__(self, input_units, output_units, learning_rate=0.1):
         # A dense layer is a layer which performs a learned affine transformation:
         # f(x) = <W*x> + b
         
@@ -156,13 +156,55 @@ y_val = np.array([[1.0, 0,0]])
 X_test = np.array([[1.0, 0.0, 0.0], [1.0, 0.0, 1.0]])
 y_test = np.array([[0.0, 1.0], [1.0, 0.0]])
 
+# loading variables with initialization weights and biases
+h1_weights = np.array([[0.1, 0.2, 0.3], [0.1, 0.1, 0.1], [0.3, 0.3, 0.3]]).T
+h1_biases = np.array([0.2, 0.1, 0.9])
+
+h2_weights = np.array([[0.0, 0.0, 0.0], [0.1, 0.1, 0.1], [0.1, 0.1, 0.1], [0.2, 0.2, 0.2]]).T
+h2_biases = np.array([0.0, 0.2, 0.0, -0.1])
+
+o_weights = np.array([[1.5, 1.2, 1.0, 0.0], [0.0, 0.8, 0.1, 0.0]]).T
+o_biases = np.array([-0.2, -0.1])
+
 # create network layer by layer
 network = []
-network.append(Dense(X_train.shape[1],3))
+network.append(Dense(3,3, learning_rate=5.0))
 network.append(TanH())
-network.append(Dense(3,4))
+network.append(Dense(3,4, learning_rate=5.0))
 network.append(TanH())
-network.append(Dense(4,2))
+network.append(Dense(4,2, learning_rate=5.0))
+
+# initialize networks with weights and biases
+
+print(network[0].weights)
+print(network[0].biases)
+
+print(network[2].weights)
+print(network[2].biases)
+
+print(network[4].weights)
+print(network[4].biases)
+
+network[0].weights = h1_weights
+network[0].biases = h1_biases
+
+network[2].weights = h2_weights
+network[2].biases = h2_biases
+
+network[4].weights = o_weights
+network[4].biases = o_biases
+
+print("INITIALIZED ")
+print(network[0].weights)
+print(network[0].biases)
+
+print(network[2].weights)
+print(network[2].biases)
+
+print(network[4].weights)
+print(network[4].biases)
+
+# update network with biases and weights
 
 train_log = []
 val_log = []
@@ -177,6 +219,3 @@ for epoch in range(1):
     print("Train accuracy:",train_log[-1])
     print("Val accuracy:",val_log[-1])
 
-print(network[0].weights)
-print(network[2].weights)
-print(network[4].weights)
