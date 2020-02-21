@@ -1,4 +1,5 @@
-# neural net
+# Neural Network
 
 basic MLP using numpy
-for CS4470
+
+created for CS4470
